@@ -18,6 +18,13 @@ The program should work as follows:
   • If one player chooses paper and the other player chooses rock, then paper wins. (Paper wraps rock.)
   • If both players make the same choice, the game must be played again to determine the winner.
 Be sure to divide the program into functions that perform each major task.
+
+Then:
+Revise your original Rock Paper Scissors Game so that it is repeatable
+using  sentinel value to end.. On each iteration of the game you should
+accept the name of the player and keep count of how many times they
+have won. Modify your program using a new branch of your project so that
+you preserve the orginal main branch from Part 1
 */
 
 #include <iostream>
