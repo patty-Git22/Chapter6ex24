@@ -29,53 +29,66 @@ Be sure to divide the program into functions that perform each major task.
 const int ROCK = 1, PAPER = 2, SCISSORS = 3;
 
 // Function Prototypes
-int inputValidate(int);
-int computerChoice(int);
-int userChoice(int);
+int inputValidate();
+int computerChoice();
+int userChoice();
 void displayRandomNumber(int);
-void correctSelection(int, int, bool&);
+void correctSelection(int, int, int&);
 
 int computer_choice, user_choice;
-
 using namespace std;
 
 int main()
 {
-    bool playAgain;
+    char playAgain = 0;
+    string name;   //players name
+    int winCount = 0; //win counter
+    cout << "Rock Paper Scissors Game\n\n";
+    cout << "Please enter your name: ";
+    cin >> name;
 
-    do
+    while (playAgain != 'n' && playAgain != 'N')
     {
-        computer_choice = computerChoice(computer_choice);
+        int computer_choice = computerChoice();
+        int user_choice;    //players choice
 
-        user_choice = userChoice(user_choice);
+        user_choice = userChoice();
+        cout << "Computer's choice: " << computer_choice << endl;
+        correctSelection(user_choice, computer_choice, winCount);
 
-        displayRandomNumber(computer_choice);
 
-        correctSelection(computer_choice, user_choice, playAgain);
+        cout << "Number of games " << name << " has won: " << winCount << endl << endl;
+        cout << "Would you like to play again? Press (y) to play again. Press (n) to quit: ";
+        cin >> playAgain;
 
-    } while (playAgain == 1);
 
+    }
+    cout << "The game is over.\n ";
+
+
+    return 0;
 } // END int main()
 
-int computerChoice(int computer_choice)
+int computerChoice()
 {
     srand(0);
 
     return (rand() % (SCISSORS - ROCK + 1)) + ROCK;
 }
 
-int userChoice(int user_choice)
+int userChoice()
 {
+    int user_choice;
     cout << "\nChoose one of the following: \n1. Rock \n2. Paper \n3. Scissors\n";
 
-    user_choice = inputValidate(user_choice);
+    user_choice = inputValidate();
 
     return user_choice;
 }
 
-int inputValidate(int num1)
+int inputValidate()
 {
-
+    int num1;
     while (!(cin >> num1) || (num1 < 1 || num1 > 3))
     {
         cout << "Error. Number must be 1, 2, or 3";
@@ -100,7 +113,7 @@ void displayRandomNumber(int computer_choice)
     cout << endl;
 }
 
-void correctSelection(int computer_choice, int user_choice, bool & playAgain)
+void correctSelection(int computer_choice, int user_choice, int& winCount)
 {
     cout << endl;
 
@@ -109,17 +122,16 @@ void correctSelection(int computer_choice, int user_choice, bool & playAgain)
         if (user_choice == PAPER)
         {
             cout << "You win! Paper beats rock.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == SCISSORS)
         {
             cout << "Computer wins! Rock beats scissors.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == ROCK)
         {
             cout << "It's a tie. Play again to determine the winner." << endl;
-            playAgain = 1;
         }
     }
     else if (computer_choice == PAPER)
@@ -127,17 +139,16 @@ void correctSelection(int computer_choice, int user_choice, bool & playAgain)
         if (user_choice == ROCK)
         {
             cout << "Computer wins! Paper beats rock.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == SCISSORS)
         {
             cout << "You win! Scissors beats paper.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == PAPER)
         {
             cout << "It's a tie. Play again to determine the winner." << endl;
-            playAgain = 1;
         }
     }
     else if (computer_choice == SCISSORS)
@@ -145,18 +156,16 @@ void correctSelection(int computer_choice, int user_choice, bool & playAgain)
         if (user_choice == ROCK)
         {
             cout << "You win! Rock beats scissors.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == PAPER)
         {
             cout << "Computer wins! Scissors beats paper.\n";
-            playAgain = 0;
+            winCount++;
         }
         else if (user_choice == SCISSORS)
         {
             cout << "It's a tie. Play again to determine the winner." << endl;
-            playAgain = 1;
         }
     }
- 
 }
