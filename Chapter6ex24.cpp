@@ -25,12 +25,20 @@ using  sentinel value to end.. On each iteration of the game you should
 accept the name of the player and keep count of how many times they
 have won. Modify your program using a new branch of your project so that
 you preserve the orginal main branch from Part 1
+
+Then for Part 3:
+Using your program from the Rock Paper Scissors Part 2 create
+a new branch that uses a file to store the results of each new session along
+with previous sessions.
+When starting you should provide a menu that
+that lets the user start a new session, display previous sessions for yourself of any others.
 */
 
 #include <iostream>
 #include<random>
 #include <cstdlib> 
-#include <ctime>   
+#include <ctime>
+#include<fstream>
 
 // Constant variables
 const int ROCK = 1, PAPER = 2, SCISSORS = 3;
@@ -41,39 +49,62 @@ int computerChoice();
 int userChoice();
 void displayRandomNumber(int);
 void correctSelection(int, int, int&);
+void previousGame(const string& filename, string& player, int wins);
 
-int computer_choice, user_choice;
+
+int computer_choice, user_choice, wins, choice;
 using namespace std;
 
 int main()
 {
     char playAgain = 0;
     string name;   //players name
+    string player;
     int winCount = 0; //win counter
+    int choice;
+    int wins = 0;
     cout << "Rock Paper Scissors Game\n\n";
-    cout << "Please enter your name: ";
-    cin >> name;
 
-    while (playAgain != 'n' && playAgain != 'N')
+    cout << "Please select an option.\n";
+    cout << "Press 1 to view past results.\nPress 2 to play a new game. ";
+    cin >> choice;
+
+    switch (choice)
     {
-        int computer_choice = computerChoice();
-        int user_choice;    //players choice
+    case 1:
+        previousGame( "gameRecords.txt", player, wins );
+        break;
+    case 2:
+        cout << "Enter your name: ";
+        cin >> name;
 
-        user_choice = userChoice();
-        cout << "Computer's choice: " << computer_choice << endl;
-        correctSelection(user_choice, computer_choice, winCount);
+
+        while (playAgain != 'n' && playAgain != 'N')
+        {
+            int computer_choice = computerChoice();
+            int user_choice;    //players choice
+
+            user_choice = userChoice();
+            cout << "Computer's choice: " << computer_choice << endl;
+            correctSelection(user_choice, computer_choice, winCount);
 
 
-        cout << "Number of games " << name << " has won: " << winCount << endl << endl;
-        cout << "Would you like to play again? Press (y) to play again. Press (n) to quit: ";
-        cin >> playAgain;
+            cout << "Number of games " << name << " has won: " << winCount << endl << endl;
+            cout << "Would you like to play again? Press (y) to play again. Press (n) to quit: ";
+            cin >> playAgain;
 
+
+        }
+
+        ofstream outputFile("gameRecords.txt", ios::app);
+        outputFile << name << ": " << winCount << endl;
+        outputFile.close();
+
+        cout << "The game is over.\n ";
 
     }
-    cout << "The game is over.\n ";
-
-
     return 0;
+
 } // END int main()
 
 int computerChoice()
@@ -174,5 +205,22 @@ void correctSelection(int computer_choice, int user_choice, int& winCount)
         {
             cout << "It's a tie. Play again to determine the winner." << endl;
         }
+    }
+}
+
+void previousGame(const string& filename, string& player, int wins)
+
+{ ifstream     inputFile(filename); // Open the file
+    if (inputFile.is_open())
+    {
+        while (inputFile >> player >> wins) 
+        {
+            cout << player << " " << wins << endl;
+        }
+        inputFile.close();
+    }
+    else 
+    {
+        cout << "Error opening " << filename << " for reading.\n";
     }
 }
